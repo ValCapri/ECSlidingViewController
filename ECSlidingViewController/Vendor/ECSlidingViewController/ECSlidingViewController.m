@@ -257,14 +257,20 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     CGFloat panAmount = self.initialTouchPositionX - currentTouchPositionX;
     CGFloat newCenterPosition = self.initialHorizontalCenter - panAmount;
     
-    if ((newCenterPosition < self.resettedCenter && (self.anchorLeftTopViewCenter == NSNotFound || self.underRightViewController == nil)) ||
-        (newCenterPosition > self.resettedCenter && (self.anchorRightTopViewCenter == NSNotFound || self.underLeftViewController == nil))) {
+    if ((newCenterPosition < self.resettedCenter && (isinf(self.anchorLeftTopViewCenter) || self.underRightViewController == nil)) ||
+        (newCenterPosition > self.resettedCenter && (isinf(self.anchorRightTopViewCenter) || self.underLeftViewController == nil))) {
       newCenterPosition = self.resettedCenter;
     }
     
-    BOOL newCenterPositionIsOutsideAnchor = newCenterPosition < self.anchorLeftTopViewCenter || self.anchorRightTopViewCenter < newCenterPosition;
+    if (!self.shouldAllowPanningPastAnchor) {
+        if (self.underRightViewController && newCenterPosition < self.anchorLeftTopViewCenter) {
+            newCenterPosition = self.anchorLeftTopViewCenter;
+        } else if (self.underLeftViewController && self.anchorRightTopViewCenter < newCenterPosition) {
+            newCenterPosition = self.anchorRightTopViewCenter;
+        }
+    }
     
-    if ((newCenterPositionIsOutsideAnchor && self.shouldAllowPanningPastAnchor) || !newCenterPositionIsOutsideAnchor) {
+    if (newCenterPosition != self.topView.center.x) {
       [self topViewHorizontalCenterWillChange:newCenterPosition];
       [self updateTopViewHorizontalCenter:newCenterPosition];
       [self topViewHorizontalCenterDidChange:newCenterPosition];
@@ -480,7 +486,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
   } else if (self.anchorRightRevealAmount) {
     return self.resettedCenter + self.anchorRightRevealAmount;
   } else {
-    return NSNotFound;
+    return INFINITY;
   }
 }
 
@@ -491,7 +497,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
   } else if (self.anchorLeftRevealAmount) {
     return -self.resettedCenter + (self.view.bounds.size.width - self.anchorLeftRevealAmount);
   } else {
-    return NSNotFound;
+    return INFINITY;
   }
 }
 
