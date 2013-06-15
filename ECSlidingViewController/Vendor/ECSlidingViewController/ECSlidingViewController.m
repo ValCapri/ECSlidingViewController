@@ -17,7 +17,7 @@ NSString *const ECSlidingViewTopDidAnchorRight       = @"ECSlidingViewTopDidAnch
 NSString *const ECSlidingViewTopWillReset            = @"ECSlidingViewTopWillReset";
 NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidReset";
 
-@interface ECSlidingViewController()
+@interface ECSlidingViewController() <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *topViewSnapshot;
 @property (nonatomic, assign) CGFloat initialTouchPositionX;
@@ -178,6 +178,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
   self.shouldAddPanGestureRecognizerToTopViewSnapshot = NO;
   self.resetTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetTopView)];
   _panGesture          = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(updateTopViewHorizontalCenterWithRecognizer:)];
+  _panGesture.delegate = self;
   self.resetTapGesture.enabled = NO;
   self.resetStrategy = ECTapping | ECPanning;
   
@@ -259,9 +260,9 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     
     if ((newCenterPosition < self.resettedCenter && (isinf(self.anchorLeftTopViewCenter) || self.underRightViewController == nil)) ||
         (newCenterPosition > self.resettedCenter && (isinf(self.anchorRightTopViewCenter) || self.underLeftViewController == nil))) {
-      newCenterPosition = self.resettedCenter;
+        newCenterPosition = self.resettedCenter;
     }
-    
+
     if (!self.shouldAllowPanningPastAnchor) {
         if (self.underRightViewController && newCenterPosition < self.anchorLeftTopViewCenter) {
             newCenterPosition = self.anchorLeftTopViewCenter;
@@ -269,11 +270,11 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
             newCenterPosition = self.anchorRightTopViewCenter;
         }
     }
-    
+
     if (newCenterPosition != self.topView.center.x) {
-      [self topViewHorizontalCenterWillChange:newCenterPosition];
-      [self updateTopViewHorizontalCenter:newCenterPosition];
-      [self topViewHorizontalCenterDidChange:newCenterPosition];
+        [self topViewHorizontalCenterWillChange:newCenterPosition];
+        [self updateTopViewHorizontalCenter:newCenterPosition];
+        [self topViewHorizontalCenterDidChange:newCenterPosition];
     }
   } else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled) {
     CGPoint currentVelocityPoint = [recognizer velocityInView:self.view];
@@ -605,6 +606,15 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
   } else {
     [NSException raise:@"Invalid Width Layout" format:@"underRightWidthLayout must be a valid ECViewWidthLayout"];
   }
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer == _panGesture) {
+        CGPoint translation = [_panGesture translationInView:_panGesture.view];
+        return fabs(translation.x) > fabs(translation.y);
+    }
+    return YES;
 }
 
 @end
