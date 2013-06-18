@@ -275,7 +275,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     CGPoint currentVelocityPoint = [recognizer velocityInView:self.view];
     CGFloat currentVelocityX     = currentVelocityPoint.x;
 
-    BOOL isClosing = (currentVelocityX < 0 || [self underLeftShowing]);
+    BOOL isClosing = (currentVelocityX < 0 && [self underLeftShowing]);
     if (!_panToCloseOnly || isClosing) {
       if (newCenterPosition != self.topView.center.x) {
         [self topViewHorizontalCenterWillChange:newCenterPosition];
