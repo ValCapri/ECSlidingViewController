@@ -159,6 +159,14 @@ typedef enum {
  */
 @property (nonatomic, assign) ECResetStrategy resetStrategy;
 
+
+/** Specifies if the user can open and close the drawer, or just close it
+
+ This bool is used to determine whether or not the ECSlidingDrawer VC should allow the user to open the drawer with a swipe.
+ */
+@property (nonatomic, assign) BOOL panToCloseOnly;
+
+
 /** Returns a horizontal panning gesture for moving the top view.
  
  This is typically added to the top view or a top view's navigation bar.
