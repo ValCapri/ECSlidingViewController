@@ -116,6 +116,27 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
   [self.view addSubview:_topViewController.view];
 }
 
+- (void)setTopViewController:(UIViewController *)topViewController withTransition:(CATransition*)transition {
+    
+    CATransition *animation;
+    
+    if (transition) {
+        animation = transition;
+    } else {
+        animation = [CATransition animation];
+        [animation setType:kCATransitionPush];
+        [animation setSubtype:kCATransitionFromRight];
+        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [animation setFillMode:kCAFillModeBoth];
+        [animation setDuration:.25];
+    }
+    
+    self.topViewController = topViewController;
+    [UIView animateWithDuration:0.25f animations:^() {
+        [[self.view layer] addAnimation:animation forKey:@"topViewTransition"];
+    }];
+}
+
 - (void)setUnderLeftViewController:(UIViewController *)theUnderLeftViewController
 {
   [_underLeftViewController.view removeFromSuperview];

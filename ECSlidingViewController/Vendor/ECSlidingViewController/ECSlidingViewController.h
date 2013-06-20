@@ -207,6 +207,11 @@ typedef enum {
  */
 - (void)resetTopViewWithAnimations:(void(^)())animations onComplete:(void(^)())complete;
 
+/** Switches between top views with a CATransition
+ @param transition The transition to use when switching to the new top view, or nil for a default right-to-left push animation.
+ */
+- (void)setTopViewController:(UIViewController *)topViewController withTransition:(CATransition*)transition;
+
 /** Returns true if the underLeft view is showing (even partially) */
 - (BOOL)underLeftShowing;
 
