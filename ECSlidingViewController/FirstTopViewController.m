@@ -15,10 +15,11 @@
   [super viewWillAppear:animated];
   
   // shadowPath, shadowOffset, and rotation is handled by ECSlidingViewController.
-  // You just need to set the opacity, radius, and color.
+  // You just need to set the opacity, radius, color and path.
   self.view.layer.shadowOpacity = 0.75f;
   self.view.layer.shadowRadius = 10.0f;
   self.view.layer.shadowColor = [UIColor blackColor].CGColor;
+  self.view.layer.shadowPath = [[UIBezierPath bezierPathWithRect:self.view.bounds] CGPath]; //Set Predefined Shadow path for performance reasons
   
   if (![self.slidingViewController.underLeftViewController isKindOfClass:[MenuViewController class]]) {
     self.slidingViewController.underLeftViewController  = [self.storyboard instantiateViewControllerWithIdentifier:@"Menu"];
