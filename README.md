@@ -102,6 +102,7 @@ Below is an example of the anchorRightRevealAmount set:
 	  self.view.layer.shadowOpacity = 0.75f;
 	  self.view.layer.shadowRadius = 10.0f;
 	  self.view.layer.shadowColor = [UIColor blackColor].CGColor;
+	  self.view.layer.shadowPath = [[UIBezierPath bezierPathWithRect:self.view.bounds] CGPath]; //Set Predefined Shadow path for performance reasons
 	}
 
 ## MIT License
