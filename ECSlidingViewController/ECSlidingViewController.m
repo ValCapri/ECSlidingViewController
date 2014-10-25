@@ -413,6 +413,7 @@
     if (_panGesture) return _panGesture;
     
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(detectPanGestureRecognizer:)];
+    _panGesture.delegate = self;
     
     return _panGesture;
 }
@@ -576,6 +577,8 @@
 - (void)animateOperation:(ECSlidingViewControllerOperation)operation {
     if (![self operationIsValid:operation]){
         _isInteractive = NO;
+        if (operation == ECSlidingViewControllerOperationNone && self.animationComplete) { self.animationComplete(); }
+        self.animationComplete = nil;
         return;
     }
     if (self.transitionInProgress) return;
@@ -940,6 +943,12 @@
 
 - (void)notifyWhenInteractionEndsUsingBlock:(void(^)(id<UIViewControllerTransitionCoordinatorContext>context))handler {
     self.coordinatorInteractionEnded = handler;
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
 }
 
 @end

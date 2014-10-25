@@ -102,7 +102,8 @@
 
 @interface ECSlidingViewController : UIViewController <UIViewControllerContextTransitioning,
                                                        UIViewControllerTransitionCoordinator,
-                                                       UIViewControllerTransitionCoordinatorContext> {
+                                                       UIViewControllerTransitionCoordinatorContext,
+                                                       UIGestureRecognizerDelegate> {
     @private
     CGFloat _anchorLeftPeekAmount;
     CGFloat _anchorLeftRevealAmount;
