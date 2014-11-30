@@ -951,4 +951,38 @@
     return YES;
 }
 
+#pragma mark - Split View Controller container
+
+- (void)collapseSecondaryViewController:(UIViewController *)secondaryViewController forSplitViewController:(UISplitViewController *)splitViewController {
+    if ([self.topViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navigationController = (UINavigationController*)self.topViewController;
+        [navigationController showViewController:secondaryViewController sender:nil];
+    }
+}
+
+- (UIViewController *)separateSecondaryViewControllerForSplitViewController:(UISplitViewController *)splitViewController {
+    if ([self.topViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navigationController = (UINavigationController*)self.topViewController;
+        UIViewController* viewController = [navigationController popViewControllerAnimated:YES];
+        return viewController;
+    }
+    return nil;
+}
+
+- (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {
+    if ([self.topViewController isKindOfClass:[UINavigationController class]] && self.splitViewController.collapsed) {
+        UINavigationController* navigationController = (UINavigationController*)self.topViewController;
+        [navigationController showViewController:vc sender:sender];
+        return YES;
+    }
+    return NO;
+}
+
+- (void)showViewController:(UIViewController *)vc sender:(id)sender {
+    if ([self.topViewController isKindOfClass:[UINavigationController class]] && self.splitViewController.collapsed) {
+        UINavigationController* navigationController = (UINavigationController*)self.topViewController;
+        [navigationController showViewController:vc sender:sender];
+    }
+}
+
 @end
