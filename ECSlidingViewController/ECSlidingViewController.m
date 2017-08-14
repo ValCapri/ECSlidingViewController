@@ -970,7 +970,7 @@
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {
-    if ([self.topViewController isKindOfClass:[UINavigationController class]] && self.splitViewController.collapsed) {
+    if ([self.topViewController isKindOfClass:[UINavigationController class]] && self.splitViewController != nil && self.splitViewController.collapsed) {
         UINavigationController* navigationController = (UINavigationController*)self.topViewController;
         [navigationController showViewController:vc sender:sender];
         return YES;
@@ -979,7 +979,7 @@
 }
 
 - (void)showViewController:(UIViewController *)vc sender:(id)sender {
-    if ([self.topViewController isKindOfClass:[UINavigationController class]] && self.splitViewController.collapsed) {
+    if ([self.topViewController isKindOfClass:[UINavigationController class]] && self.splitViewController != nil && self.splitViewController.collapsed) {
         UINavigationController* navigationController = (UINavigationController*)self.topViewController;
         [navigationController showViewController:vc sender:sender];
     }
