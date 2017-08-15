@@ -981,7 +981,7 @@
 - (void)showViewController:(UIViewController *)vc sender:(id)sender {
     if ([self.topViewController isKindOfClass:[UINavigationController class]] && self.splitViewController != nil && self.splitViewController.collapsed) {
         UINavigationController* navigationController = (UINavigationController*)self.topViewController;
-        [navigationController showViewController:vc sender:sender];
+        [navigationController pushViewController:self.topViewController animated:YES];
     }
 }
 
